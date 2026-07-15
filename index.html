@@ -8,61 +8,56 @@
 
     <style>
         :root {
-            /* 高级日式苹果风调色板 - 低饱和，柔和 */
-            --bg: #0b0c10;
-            --text: rgba(255, 255, 255, 0.92);
-            --muted: rgba(255, 255, 255, 0.66);
-            --faint: rgba(255, 255, 255, 0.45);
-
-            --surface: rgba(255, 255, 255, 0.055);
-            --surface-strong: rgba(255, 255, 255, 0.085);
-            --surface-soft: rgba(255, 255, 255, 0.040);
-
-            --line: rgba(255, 255, 255, 0.10);
+            --bg: #06070b;
+            --text: rgba(255, 255, 255, 0.93);
+            --muted: rgba(255, 255, 255, 0.64);
+            --faint: rgba(255, 255, 255, 0.42);
+            --surface-glass: rgba(255, 255, 255, 0.045);
+            --surface-strong: rgba(255, 255, 255, 0.075);
+            --surface-soft: rgba(255, 255, 255, 0.032);
+            --line: rgba(255, 255, 255, 0.09);
             --line-strong: rgba(255, 255, 255, 0.16);
-
+            --line-glow: rgba(255, 255, 255, 0.22);
             --accent: #0a84ff;
-            --accent2: #64d2ff;
-            --good: #30d158;
-
-            --shadow: 0 18px 60px rgba(0, 0, 0, 0.55);
-            --shadow-sm: 0 10px 28px rgba(0, 0, 0, 0.35);
-            --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.20);
-
-            --radius-lg: 28px;
-            --radius: 18px;
-            --radius-sm: 14px;
-
-            --max: 980px;
-
+            --accent2: #5ec8f2;
+            --accent3: #38bdf8;
+            --good: #34d399;
+            --shadow-deep: 0 24px 80px rgba(0, 0, 0, 0.65);
+            --shadow-md: 0 12px 36px rgba(0, 0, 0, 0.45);
+            --shadow-sm: 0 6px 20px rgba(0, 0, 0, 0.30);
+            --shadow-glow: 0 0 60px rgba(10, 132, 255, 0.08);
+            --radius-xl: 26px;
+            --radius-lg: 20px;
+            --radius: 16px;
+            --radius-sm: 12px;
+            --max: 960px;
             --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
                 "PingFang SC", "Helvetica Neue", "Noto Sans SC", Arial, sans-serif;
-
-            --ease: cubic-bezier(.25, .1, .25, 1);
-            --ease-out: cubic-bezier(.2, .8, .2, 1);
+            --ease-out-expo: cubic-bezier(.16, 1, .3, 1);
+            --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
+            --ease-smooth: cubic-bezier(.4, 0, .2, 1);
         }
 
         @media (prefers-color-scheme: light) {
             :root {
-                --bg: #f2f4f8;
-                --text: #1a1c23;
-                --muted: #5a5f6e;
+                --bg: #eceef3;
+                --text: #1a1c26;
+                --muted: #555b6e;
                 --faint: #7d8296;
-
-                --surface: rgba(255, 255, 255, 0.70);
-                --surface-strong: rgba(255, 255, 255, 0.92);
-                --surface-soft: rgba(255, 255, 255, 0.60);
-
+                --surface-glass: rgba(255, 255, 255, 0.55);
+                --surface-strong: rgba(255, 255, 255, 0.82);
+                --surface-soft: rgba(255, 255, 255, 0.48);
                 --line: rgba(0, 0, 0, 0.07);
-                --line-strong: rgba(0, 0, 0, 0.12);
-
-                --shadow: 0 18px 50px rgba(0, 0, 0, 0.08);
-                --shadow-sm: 0 10px 28px rgba(0, 0, 0, 0.06);
-                --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.05);
-
+                --line-strong: rgba(0, 0, 0, 0.13);
+                --line-glow: rgba(0, 0, 0, 0.16);
+                --shadow-deep: 0 20px 60px rgba(0, 0, 0, 0.10);
+                --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.08);
+                --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.05);
+                --shadow-glow: 0 0 50px rgba(0, 122, 255, 0.05);
                 --accent: #007aff;
                 --accent2: #32ade6;
-                --good: #34c759;
+                --accent3: #0ea5e9;
+                --good: #30b158;
             }
         }
 
@@ -87,144 +82,322 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             text-rendering: optimizeLegibility;
+            cursor: default;
         }
 
         a {
             color: inherit;
             text-decoration: none;
         }
-
         :focus-visible {
-            outline: 2px solid rgba(10, 132, 255, 0.5);
-            outline-offset: 3px;
+            outline: 2px solid rgba(10, 132, 255, 0.55);
+            outline-offset: 4px;
             border-radius: 12px;
         }
 
-        /* ===== 背景 – 更细腻的渐变和光晕 ===== */
-        .bg {
+        /* ============ 背景系统 ============ */
+        .bg-layer {
             position: fixed;
             inset: 0;
-            z-index: -2;
+            z-index: -10;
             pointer-events: none;
             overflow: hidden;
         }
+        .bg-gradient {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 900px 500px at 15% 8%, rgba(10, 132, 255, 0.07), transparent 55%),
+                radial-gradient(ellipse 700px 400px at 78% 12%, rgba(94, 200, 242, 0.05), transparent 55%),
+                radial-gradient(ellipse 650px 450px at 50% 85%, rgba(52, 211, 153, 0.04), transparent 55%),
+                radial-gradient(ellipse 500px 300px at 35% 45%, rgba(255, 255, 255, 0.015), transparent 60%);
+        }
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+            background-size: 60px 60px;
+            opacity: 0.5;
+            mask-image: radial-gradient(ellipse 70% 70% at 50% 40%, black 25%, transparent 65%);
+            -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 40%, black 25%, transparent 65%);
+        }
+        .bg-noise {
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.10'/%3E%3C/svg%3E");
+            opacity: .22;
+            mix-blend-mode: overlay;
+        }
+        @media (prefers-color-scheme: light) {
+            .bg-noise {
+                opacity: .12;
+            }
+        }
 
-        .blob {
+        /* 浮动光斑 */
+        .orb {
             position: absolute;
             border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.25;
-            animation: float 20s var(--ease-out) infinite alternate;
+            filter: blur(90px);
             will-change: transform;
+            animation: orbFloat 22s var(--ease-smooth) infinite alternate;
         }
-        .b1 {
-            width: 560px;
-            height: 560px;
-            left: -200px;
-            top: -280px;
-            background: radial-gradient(circle at 30% 30%, rgba(10, 132, 255, 0.6), transparent 65%);
+        .orb-1 {
+            width: 520px;
+            height: 520px;
+            left: -180px;
+            top: -240px;
+            background: radial-gradient(circle at 35% 35%, rgba(10, 132, 255, 0.35), transparent 60%);
+            opacity: 0.55;
+            animation-duration: 20s;
         }
-        .b2 {
-            width: 480px;
-            height: 480px;
-            right: -220px;
-            bottom: -220px;
-            opacity: 0.18;
+        .orb-2 {
+            width: 440px;
+            height: 440px;
+            right: -190px;
+            bottom: -200px;
+            background: radial-gradient(circle at 30% 30%, rgba(94, 200, 242, 0.28), transparent 60%);
+            opacity: 0.45;
             animation-duration: 26s;
-            background: radial-gradient(circle at 30% 30%, rgba(100, 210, 255, 0.45), transparent 65%);
+            animation-delay: -3s;
         }
-        .b3 {
-            width: 400px;
-            height: 400px;
-            left: 30%;
-            bottom: -300px;
-            opacity: 0.15;
+        .orb-3 {
+            width: 340px;
+            height: 340px;
+            left: 40%;
+            bottom: -280px;
+            background: radial-gradient(circle at 30% 30%, rgba(52, 211, 153, 0.20), transparent 60%);
+            opacity: 0.35;
             animation-duration: 30s;
-            background: radial-gradient(circle at 30% 30%, rgba(48, 209, 88, 0.30), transparent 65%);
+            animation-delay: -6s;
         }
-
-        @keyframes float {
+        @keyframes orbFloat {
             0% {
                 transform: translate3d(0, 0, 0) scale(1);
             }
             100% {
-                transform: translate3d(0, 20px, 0) scale(1.06);
+                transform: translate3d(18px, -22px, 0) scale(1.07);
             }
         }
 
-        .vignette {
+        /* 粒子 */
+        .particles {
             position: absolute;
             inset: 0;
-            background:
-                radial-gradient(ellipse 1200px 600px at 50% 0%, rgba(255, 255, 255, 0.04), transparent 60%),
-                radial-gradient(ellipse 800px 500px at 10% 50%, rgba(10, 132, 255, 0.03), transparent 60%),
-                radial-gradient(ellipse 800px 500px at 90% 50%, rgba(100, 210, 255, 0.025), transparent 60%),
-                radial-gradient(ellipse 800px 600px at 50% 100%, rgba(48, 209, 88, 0.02), transparent 60%);
-            z-index: -1;
         }
-
-        .grain {
+        .particle {
             position: absolute;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.12'/%3E%3C/svg%3E");
-            opacity: .18;
-            mix-blend-mode: overlay;
-            z-index: -1;
+            width: 2.5px;
+            height: 2.5px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.55);
+            animation: particleDrift 14s var(--ease-smooth) infinite;
+            opacity: 0;
+        }
+        .particle:nth-child(1) {
+            left: 12%;
+            top: 25%;
+            animation-delay: 0s;
+            animation-duration: 13s;
+        }
+        .particle:nth-child(2) {
+            left: 28%;
+            top: 60%;
+            animation-delay: -2s;
+            animation-duration: 15s;
+            width: 2px;
+            height: 2px;
+        }
+        .particle:nth-child(3) {
+            left: 55%;
+            top: 18%;
+            animation-delay: -4s;
+            animation-duration: 16s;
+            width: 3px;
+            height: 3px;
+            background: rgba(94, 200, 242, 0.5);
+        }
+        .particle:nth-child(4) {
+            left: 72%;
+            top: 70%;
+            animation-delay: -1s;
+            animation-duration: 12s;
+        }
+        .particle:nth-child(5) {
+            left: 85%;
+            top: 35%;
+            animation-delay: -5s;
+            animation-duration: 17s;
+            width: 2px;
+            height: 2px;
+            background: rgba(52, 211, 153, 0.45);
+        }
+        .particle:nth-child(6) {
+            left: 40%;
+            top: 78%;
+            animation-delay: -7s;
+            animation-duration: 14s;
+            width: 3px;
+            height: 3px;
+        }
+        .particle:nth-child(7) {
+            left: 8%;
+            top: 50%;
+            animation-delay: -3s;
+            animation-duration: 18s;
+            width: 1.5px;
+            height: 1.5px;
+        }
+        .particle:nth-child(8) {
+            left: 65%;
+            top: 8%;
+            animation-delay: -6s;
+            animation-duration: 11s;
+            background: rgba(10, 132, 255, 0.5);
+        }
+        @keyframes particleDrift {
+            0% {
+                transform: translateY(0) translateX(0) scale(1);
+                opacity: 0;
+            }
+            15% {
+                opacity: 0.8;
+            }
+            50% {
+                opacity: 0.35;
+                transform: translateY(-60px) translateX(25px) scale(1.6);
+            }
+            85% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-110px) translateX(-15px) scale(0.6);
+                opacity: 0;
+            }
         }
 
-        /* ===== 布局 ===== */
+        /* 光标光晕 */
+        .cursor-glow {
+            position: fixed;
+            z-index: 9999;
+            pointer-events: none;
+            width: 380px;
+            height: 380px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(10, 132, 255, 0.06) 0%, rgba(94, 200, 242, 0.03) 30%, transparent 65%);
+            transform: translate(-50%, -50%);
+            transition: opacity 0.4s ease;
+            opacity: 0;
+            will-change: left, top, opacity;
+        }
+        @media (max-width: 768px) {
+            .cursor-glow {
+                display: none;
+            }
+        }
+        @media (prefers-color-scheme: light) {
+            .cursor-glow {
+                background: radial-gradient(circle, rgba(0, 122, 255, 0.07) 0%, rgba(50, 173, 230, 0.03) 30%, transparent 65%);
+            }
+        }
+
+        /* ============ 布局 ============ */
         .wrap {
             max-width: var(--max);
             margin: 0 auto;
-            padding: calc(18px + env(safe-area-inset-top)) 16px 64px;
+            padding: calc(20px + env(safe-area-inset-top)) 18px 72px;
+            position: relative;
+            z-index: 1;
         }
 
-        /* ===== Hero – 毛玻璃更通透，动画更柔和 ===== */
+        /* ============ HERO - 深度玻璃卡片 ============ */
         .hero {
             position: relative;
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius-xl);
             border: 1px solid var(--line);
-            background: linear-gradient(160deg, var(--surface-strong), var(--surface));
-            box-shadow: var(--shadow);
-            padding: 24px;
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
+            background: linear-gradient(165deg,
+                    rgba(255, 255, 255, 0.07) 0%,
+                    rgba(255, 255, 255, 0.035) 40%,
+                    rgba(255, 255, 255, 0.02) 100%);
+            box-shadow:
+                var(--shadow-deep),
+                var(--shadow-glow),
+                inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            padding: 26px 28px;
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
             overflow: hidden;
-            animation: heroEnter 800ms var(--ease-out) both;
-            transition: box-shadow 0.4s ease;
+            animation: heroEnter 900ms var(--ease-out-expo) both;
+            transition: box-shadow 0.5s ease, border-color 0.5s ease;
+            will-change: transform;
         }
         .hero:hover {
-            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+            border-color: var(--line-glow);
+            box-shadow:
+                var(--shadow-deep),
+                0 0 90px rgba(10, 132, 255, 0.10),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
         }
-
         @keyframes heroEnter {
             0% {
-                transform: translateY(18px) scale(0.98);
+                transform: translateY(22px) scale(0.975);
                 opacity: 0;
+                filter: blur(4px);
             }
             100% {
                 transform: translateY(0) scale(1);
                 opacity: 1;
+                filter: blur(0);
             }
         }
-
         .hero::before {
             content: "";
             position: absolute;
             inset: -1px;
             border-radius: inherit;
-            background: radial-gradient(600px 200px at 15% 0%, rgba(10, 132, 255, 0.15), transparent 55%),
-                radial-gradient(600px 200px at 85% 0%, rgba(100, 210, 255, 0.10), transparent 55%);
-            opacity: 0.6;
+            background: radial-gradient(700px 220px at 18% 2%, rgba(10, 132, 255, 0.12), transparent 50%),
+                radial-gradient(600px 200px at 80% 5%, rgba(94, 200, 242, 0.08), transparent 50%),
+                radial-gradient(500px 180px at 50% 95%, rgba(52, 211, 153, 0.05), transparent 50%);
+            opacity: 0.55;
             pointer-events: none;
+            z-index: 0;
+        }
+        .hero::after {
+            content: "";
+            position: absolute;
+            top: -40%;
+            left: -20%;
+            width: 70%;
+            height: 140%;
+            background: linear-gradient(105deg,
+                    transparent 30%,
+                    rgba(255, 255, 255, 0.025) 48%,
+                    rgba(255, 255, 255, 0.06) 50%,
+                    rgba(255, 255, 255, 0.025) 52%,
+                    transparent 70%);
+            opacity: 0.5;
+            pointer-events: none;
+            z-index: 0;
+            animation: glassSweep 8s var(--ease-smooth) infinite;
+        }
+        @keyframes glassSweep {
+            0%,
+            100% {
+                transform: translateX(-8%) skewX(-6deg);
+            }
+            50% {
+                transform: translateX(8%) skewX(-6deg);
+            }
         }
 
         .heroGrid {
             position: relative;
             z-index: 1;
             display: grid;
-            grid-template-columns: 1.3fr 0.7fr;
-            gap: 20px;
+            grid-template-columns: 1.25fr 0.75fr;
+            gap: 22px;
             align-items: start;
         }
         @media (max-width: 860px) {
@@ -240,99 +413,120 @@
             min-width: 0;
         }
 
-        /* ===== 头像 – 纯文字优雅徽标 ===== */
+        /* 头像 - 玻璃徽标 */
         .avatar {
-            width: 58px;
-            height: 58px;
+            width: 60px;
+            height: 60px;
             border-radius: 18px;
             flex: 0 0 auto;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
+            font-size: 25px;
+            font-weight: 750;
+            letter-spacing: 0.4px;
             color: rgba(255, 255, 255, 0.9);
-            background: linear-gradient(135deg, rgba(10, 132, 255, 0.30), rgba(100, 210, 255, 0.15));
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.20);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: linear-gradient(140deg,
+                    rgba(10, 132, 255, 0.28) 0%,
+                    rgba(94, 200, 242, 0.12) 60%,
+                    rgba(255, 255, 255, 0.04) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow:
+                0 12px 34px rgba(0, 0, 0, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 0 20px rgba(10, 132, 255, 0.08);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             user-select: none;
-            transition: transform 0.3s var(--ease-out), box-shadow 0.3s ease;
+            transition: all 0.4s var(--ease-spring);
+            will-change: transform;
+            position: relative;
+            z-index: 2;
         }
         .avatar:hover {
-            transform: scale(1.04) translateY(-2px);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.30);
+            transform: scale(1.06) translateY(-3px) rotate(-2deg);
+            box-shadow:
+                0 18px 44px rgba(0, 0, 0, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.14),
+                0 0 34px rgba(10, 132, 255, 0.14);
         }
         @media (prefers-color-scheme: light) {
             .avatar {
-                color: #1a1c23;
-                background: linear-gradient(135deg, rgba(10, 132, 255, 0.20), rgba(100, 210, 255, 0.08));
-                border-color: rgba(0, 0, 0, 0.10);
-                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+                color: #1a1c26;
+                background: linear-gradient(140deg, rgba(0, 122, 255, 0.18), rgba(50, 173, 230, 0.06), rgba(255, 255, 255, 0.55));
+                border-color: rgba(0, 0, 0, 0.12);
+                box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            }
+            .avatar:hover {
+                box-shadow: 0 14px 34px rgba(0, 0, 0, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.7);
             }
         }
 
         .idText {
             min-width: 0;
         }
-
         .nameRow {
             display: flex;
             flex-wrap: wrap;
             gap: 10px 14px;
             align-items: baseline;
         }
-
         .name {
-            font-size: clamp(30px, 3.2vw, 40px);
-            font-weight: 820;
-            letter-spacing: 0.3px;
-            background: linear-gradient(90deg, var(--text), var(--muted));
+            font-size: clamp(31px, 3.4vw, 42px);
+            font-weight: 830;
+            letter-spacing: 0.2px;
+            background: linear-gradient(95deg,
+                    rgba(255, 255, 255, 0.95) 0%,
+                    rgba(255, 255, 255, 0.78) 50%,
+                    rgba(200, 220, 255, 0.85) 100%);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            line-height: 1.15;
         }
-        @media (prefers-color-scheme: dark) {
+        @media (prefers-color-scheme: light) {
             .name {
-                background: linear-gradient(90deg, #fff, rgba(255, 255, 255, 0.7));
+                background: linear-gradient(95deg, #1a1c26 0%, #3a3f50 50%, #1a3a5c 100%);
                 -webkit-background-clip: text;
                 background-clip: text;
                 color: transparent;
             }
         }
-
         .roleTag {
             font-size: 13px;
             color: var(--muted);
-            padding: 6px 12px;
+            padding: 6px 14px;
             border-radius: 999px;
-            border: 1px solid var(--line);
+            border: 1px solid rgba(255, 255, 255, 0.14);
             background: rgba(255, 255, 255, 0.04);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             white-space: nowrap;
-            font-weight: 500;
+            font-weight: 520;
             letter-spacing: 0.3px;
+            transition: all 0.3s ease;
         }
-
+        .roleTag:hover {
+            border-color: rgba(255, 255, 255, 0.28);
+            background: rgba(255, 255, 255, 0.08);
+        }
         .meta {
             margin-top: 10px;
             color: var(--muted);
-            font-size: 13.6px;
+            font-size: 13.5px;
             display: flex;
             flex-wrap: wrap;
-            gap: 6px 12px;
+            gap: 5px 10px;
             align-items: center;
         }
         .meta .sep {
-            opacity: 0.4;
+            opacity: 0.35;
             user-select: none;
+            font-weight: 300;
         }
         .meta a {
             position: relative;
-            transition: color 0.2s ease;
+            transition: color 0.25s ease;
         }
         .meta a:hover {
             color: var(--text);
@@ -342,60 +536,66 @@
             position: absolute;
             left: 0;
             right: 0;
-            bottom: -2px;
+            bottom: -3px;
             height: 1.5px;
-            background: linear-gradient(90deg, rgba(10, 132, 255, 0.0), rgba(10, 132, 255, 0.5), rgba(100, 210, 255, 0.4), rgba(10, 132, 255, 0.0));
+            background: linear-gradient(90deg, transparent, rgba(10, 132, 255, 0.5), rgba(94, 200, 242, 0.4), transparent);
             transform: scaleX(0);
             transform-origin: left;
-            transition: transform 0.35s var(--ease-out);
+            transition: transform 0.4s var(--ease-out-expo);
             opacity: 0.8;
         }
         .meta a:hover::after {
             transform: scaleX(1);
         }
-
         .meta2 {
-            margin-top: 8px;
+            margin-top: 7px;
             color: var(--muted);
-            font-size: 13.6px;
+            font-size: 13.4px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px 8px;
         }
         .meta2 strong {
             color: var(--text);
-            font-weight: 700;
+            font-weight: 720;
         }
-
         .chips {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 16px;
+            gap: 10px;
+            margin-top: 15px;
         }
         .chip {
-            font-size: 12.8px;
-            padding: 7px 14px;
+            font-size: 12.6px;
+            padding: 7px 15px;
             border-radius: 999px;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
-            transition: all 0.3s var(--ease-out);
+            border: 1px solid rgba(255, 255, 255, 0.11);
+            background: linear-gradient(180deg,
+                    rgba(255, 255, 255, 0.05) 0%,
+                    rgba(255, 255, 255, 0.015) 100%);
+            transition: all 0.35s var(--ease-spring);
             user-select: none;
             will-change: transform;
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
             font-weight: 500;
             letter-spacing: 0.2px;
+            cursor: default;
         }
         .chip:hover {
-            transform: translateY(-3px) scale(1.02);
-            border-color: rgba(255, 255, 255, 0.25);
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.04));
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            transform: translateY(-3px) scale(1.03);
+            border-color: rgba(255, 255, 255, 0.26);
+            background: linear-gradient(180deg,
+                    rgba(255, 255, 255, 0.10) 0%,
+                    rgba(255, 255, 255, 0.03) 100%);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18), 0 0 18px rgba(10, 132, 255, 0.06);
         }
 
-        /* ===== Action tiles – 更精致的卡片 ===== */
+        /* Action tiles */
         .actions {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            gap: 10px;
             align-content: start;
         }
         @media (max-width: 520px) {
@@ -403,32 +603,32 @@
                 grid-template-columns: 1fr;
             }
         }
-
         .tile {
             position: relative;
-            border-radius: 20px;
-            border: 1px solid var(--line);
-            background: rgba(255, 255, 255, 0.04);
+            border-radius: var(--radius);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.035);
             box-shadow: var(--shadow-sm);
-            padding: 14px;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            transition: all 0.35s var(--ease-out);
+            padding: 13px 15px;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            transition: all 0.4s var(--ease-spring);
             overflow: hidden;
+            will-change: transform;
         }
         .tile:hover {
             transform: translateY(-4px);
-            border-color: rgba(255, 255, 255, 0.20);
-            background: rgba(255, 255, 255, 0.07);
-            box-shadow: var(--shadow-soft);
+            border-color: rgba(255, 255, 255, 0.18);
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 14px 34px rgba(0, 0, 0, 0.22), 0 0 20px rgba(10, 132, 255, 0.04);
         }
         .tile::before {
             content: "";
             position: absolute;
             inset: -1px;
-            background: radial-gradient(400px 120px at 10% 0%, rgba(10, 132, 255, 0.10), transparent 55%),
-                radial-gradient(400px 120px at 90% 0%, rgba(100, 210, 255, 0.08), transparent 55%);
-            opacity: 0.3;
+            background: radial-gradient(350px 100px at 10% 0%, rgba(10, 132, 255, 0.08), transparent 55%),
+                radial-gradient(350px 100px at 90% 0%, rgba(94, 200, 242, 0.06), transparent 55%);
+            opacity: 0.35;
             pointer-events: none;
         }
         .tileHead {
@@ -439,29 +639,31 @@
             justify-content: space-between;
         }
         .tileTitle {
-            font-size: 13px;
+            font-size: 12.8px;
             font-weight: 700;
             letter-spacing: 0.3px;
             display: flex;
-            gap: 8px;
+            gap: 7px;
             align-items: center;
         }
         .tileIcon {
-            width: 24px;
-            height: 24px;
+            width: 26px;
+            height: 26px;
             border-radius: 8px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             border: 1px solid rgba(255, 255, 255, 0.10);
             background: rgba(255, 255, 255, 0.03);
-            font-size: 12px;
+            font-size: 13px;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
         }
         .tileValue {
             position: relative;
             z-index: 1;
-            margin-top: 8px;
-            font-size: 13px;
+            margin-top: 7px;
+            font-size: 12.8px;
             color: var(--muted);
             white-space: nowrap;
             overflow: hidden;
@@ -470,123 +672,140 @@
         .tileBtns {
             position: relative;
             z-index: 1;
-            margin-top: 12px;
+            margin-top: 11px;
             display: flex;
-            gap: 8px;
+            gap: 7px;
             flex-wrap: wrap;
         }
         .btn {
             appearance: none;
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.10);
             background: rgba(255, 255, 255, 0.02);
             color: var(--muted);
-            padding: 6px 14px;
+            padding: 6px 13px;
             border-radius: 999px;
-            font-size: 12px;
+            font-size: 11.8px;
             cursor: pointer;
-            transition: all 0.25s var(--ease-out);
+            transition: all 0.3s var(--ease-spring);
             user-select: none;
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
             font-weight: 500;
+            letter-spacing: 0.2px;
         }
         .btn:hover {
             transform: translateY(-2px);
             color: var(--text);
-            border-color: rgba(10, 132, 255, 0.35);
-            background: rgba(255, 255, 255, 0.06);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.10);
+            border-color: rgba(10, 132, 255, 0.4);
+            background: rgba(255, 255, 255, 0.07);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
         }
 
-        /* ===== Dock – 更精致 ===== */
+        /* ============ DOCK - 悬浮导航 ============ */
         .dock {
             position: sticky;
             top: calc(14px + env(safe-area-inset-top));
-            z-index: 10;
-            margin: 16px 0 0;
+            z-index: 20;
+            margin: 18px 0 0;
             display: flex;
-            gap: 6px;
+            gap: 5px;
             flex-wrap: wrap;
             justify-content: center;
-            padding: 8px 12px;
+            padding: 7px 10px;
             border-radius: 999px;
-            border: 1px solid var(--line);
-            background: rgba(255, 255, 255, 0.035);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            box-shadow: var(--shadow-sm);
-            transition: box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            box-shadow: var(--shadow-md);
+            transition: all 0.4s ease;
         }
         .dock:hover {
-            box-shadow: var(--shadow-soft);
+            box-shadow: 0 14px 38px rgba(0, 0, 0, 0.28);
+            border-color: rgba(255, 255, 255, 0.13);
         }
         .dock a {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 7px;
             padding: 9px 14px;
             border-radius: 999px;
             border: 1px solid transparent;
             font-size: 13px;
             color: var(--muted);
-            transition: all 0.3s var(--ease-out);
+            transition: all 0.35s var(--ease-spring);
             user-select: none;
             will-change: transform;
             font-weight: 500;
             letter-spacing: 0.2px;
+            cursor: pointer;
         }
         .dock a:hover {
             transform: translateY(-3px);
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.07);
             color: var(--text);
             border-color: rgba(255, 255, 255, 0.10);
         }
         .dock a.active {
             color: var(--text);
-            border-color: rgba(10, 132, 255, 0.30);
-            background: linear-gradient(180deg, rgba(10, 132, 255, 0.12), rgba(255, 255, 255, 0.04));
-            box-shadow: 0 4px 12px rgba(10, 132, 255, 0.10);
+            border-color: rgba(10, 132, 255, 0.35);
+            background: linear-gradient(180deg,
+                    rgba(10, 132, 255, 0.14) 0%,
+                    rgba(255, 255, 255, 0.04) 100%);
+            box-shadow: 0 4px 14px rgba(10, 132, 255, 0.12);
         }
-
         section {
-            scroll-margin-top: 96px;
+            scroll-margin-top: 100px;
         }
 
-        /* ===== Sections & Cards ===== */
+        /* ============ 卡片系统 ============ */
         .sections {
             margin-top: 18px;
             display: flex;
             flex-direction: column;
             gap: 16px;
         }
-
         .card {
             border: 1px solid var(--line);
-            background: linear-gradient(160deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
-            border-radius: var(--radius);
-            padding: 20px;
-            box-shadow: var(--shadow-sm);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            transform: translateY(20px);
+            background: linear-gradient(170deg,
+                    rgba(255, 255, 255, 0.055) 0%,
+                    rgba(255, 255, 255, 0.025) 45%,
+                    rgba(255, 255, 255, 0.01) 100%);
+            border-radius: var(--radius-lg);
+            padding: 22px 24px;
+            box-shadow: var(--shadow-md);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            transform: translateY(28px);
             opacity: 0;
-            transition: box-shadow 0.4s ease;
+            transition: box-shadow 0.5s ease, border-color 0.5s ease, transform 0.5s var(--ease-out-expo),
+                opacity 0.5s var(--ease-out-expo);
+            will-change: transform, opacity;
+            position: relative;
+            overflow: hidden;
+        }
+        .card::after {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            background: radial-gradient(600px 160px at 15% 0%, rgba(10, 132, 255, 0.04), transparent 55%),
+                radial-gradient(500px 140px at 85% 100%, rgba(94, 200, 242, 0.03), transparent 55%);
+            opacity: 0.5;
+            pointer-events: none;
+            z-index: 0;
         }
         .card:hover {
-            box-shadow: var(--shadow-soft);
+            border-color: var(--line-glow);
+            box-shadow: 0 18px 48px rgba(0, 0, 0, 0.32), 0 0 40px rgba(10, 132, 255, 0.04);
         }
         .card.reveal {
-            animation: cardReveal 800ms var(--ease-out) forwards;
+            transform: translateY(0);
+            opacity: 1;
         }
-        @keyframes cardReveal {
-            0% {
-                transform: translateY(20px) scale(0.98);
-                opacity: 0;
-            }
-            100% {
-                transform: translateY(0) scale(1);
-                opacity: 1;
-            }
+        .card .card-inner {
+            position: relative;
+            z-index: 1;
         }
 
         .sectionTitle {
@@ -594,69 +813,112 @@
             align-items: center;
             justify-content: space-between;
             gap: 12px;
-            margin-bottom: 14px;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
         }
         .sectionTitle h2 {
             font-size: 16px;
             font-weight: 800;
             letter-spacing: 0.4px;
             color: var(--text);
+            white-space: nowrap;
         }
         .sectionTitle .line {
-            height: 1.5px;
+            height: 1px;
             flex: 1;
-            background: linear-gradient(90deg, rgba(255, 255, 255, 0.15), transparent);
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.16), transparent 85%);
+            border-radius: 2px;
         }
 
+        /* Entry - 3D卡片 */
         .entry {
             position: relative;
-            border-radius: 18px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            background: rgba(0, 0, 0, 0.08);
-            padding: 16px 14px;
-            margin-bottom: 12px;
-            transition: all 0.35s var(--ease-out);
+            z-index: 1;
+            border-radius: var(--radius);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            background: rgba(0, 0, 0, 0.06);
+            padding: 16px 16px;
+            margin-bottom: 11px;
+            transition: all 0.4s var(--ease-spring);
             overflow: hidden;
+            will-change: transform;
+            transform-style: preserve-3d;
+            perspective: 800px;
         }
         @media (prefers-color-scheme: light) {
             .entry {
-                background: rgba(255, 255, 255, 0.55);
+                background: rgba(255, 255, 255, 0.50);
                 border-color: rgba(0, 0, 0, 0.04);
             }
         }
         .entry:hover {
-            transform: translateY(-3px);
-            border-color: rgba(255, 255, 255, 0.18);
-            background: rgba(255, 255, 255, 0.06);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.16);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 14px 36px rgba(0, 0, 0, 0.18), 0 0 22px rgba(10, 132, 255, 0.03);
         }
         @media (prefers-color-scheme: light) {
             .entry:hover {
-                background: rgba(255, 255, 255, 0.80);
-                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+                background: rgba(255, 255, 255, 0.72);
+                box-shadow: 0 10px 28px rgba(0, 0, 0, 0.07);
             }
+        }
+        .entry::before {
+            content: "";
+            position: absolute;
+            top: -30%;
+            left: -40%;
+            width: 70%;
+            height: 160%;
+            background: linear-gradient(105deg,
+                    transparent 40%,
+                    rgba(255, 255, 255, 0.02) 49%,
+                    rgba(255, 255, 255, 0.05) 50%,
+                    rgba(255, 255, 255, 0.02) 51%,
+                    transparent 60%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .entry:hover::before {
+            opacity: 1;
+            animation: entrySweep 1.6s var(--ease-smooth) forwards;
+        }
+        @keyframes entrySweep {
+            0% {
+                transform: translateX(-15%) skewX(-7deg);
+            }
+            100% {
+                transform: translateX(20%) skewX(-7deg);
+            }
+        }
+        .entry .entry-content {
+            position: relative;
+            z-index: 1;
         }
 
         .row {
             display: grid;
-            grid-template-columns: 1.2fr 0.8fr 0.55fr;
-            gap: 12px;
+            grid-template-columns: 1.25fr 0.75fr 0.5fr;
+            gap: 10px;
             align-items: baseline;
         }
         .row .left {
             font-weight: 750;
-            font-size: 14.8px;
+            font-size: 14.6px;
             letter-spacing: 0.2px;
         }
         .row .mid {
             color: var(--muted);
-            font-size: 14px;
+            font-size: 13.8px;
             text-align: center;
-            font-weight: 650;
+            font-weight: 620;
         }
         .row .right {
             color: var(--faint);
-            font-size: 13px;
+            font-size: 12.8px;
             text-align: right;
             white-space: nowrap;
             font-weight: 500;
@@ -670,98 +932,117 @@
                 text-align: left;
             }
         }
-
         .subline {
-            margin-top: 8px;
+            margin-top: 7px;
             color: var(--muted);
             font-size: 13px;
             font-weight: 400;
-            letter-spacing: 0.2px;
+            letter-spacing: 0.15px;
+            position: relative;
+            z-index: 1;
         }
-
         ul.bullets {
             list-style: none;
             margin-top: 10px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            font-size: 14px;
+            gap: 7px;
+            font-size: 13.8px;
             color: var(--text);
             line-height: 1.6;
+            position: relative;
+            z-index: 1;
         }
         ul.bullets li {
             position: relative;
-            padding-left: 20px;
-            color: rgba(255, 255, 255, 0.88);
+            padding-left: 22px;
+            color: rgba(255, 255, 255, 0.87);
         }
         @media (prefers-color-scheme: light) {
             ul.bullets li {
-                color: rgba(26, 28, 35, 0.88);
+                color: rgba(26, 28, 38, 0.87);
             }
         }
         ul.bullets li::before {
             content: "";
             position: absolute;
             left: 0;
-            top: 0.65em;
-            width: 7px;
-            height: 7px;
-            border-radius: 2px;
-            background: linear-gradient(135deg, rgba(10, 132, 255, 0.9), rgba(100, 210, 255, 0.8));
-            transform: translateY(-50%);
-            box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.08);
-            opacity: 0.9;
+            top: 0.6em;
+            width: 8px;
+            height: 8px;
+            border-radius: 2.5px;
+            background: linear-gradient(135deg, rgba(10, 132, 255, 0.85), rgba(94, 200, 242, 0.75));
+            transform: translateY(-50%) rotate(45deg);
+            box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.07);
+            opacity: 0.85;
+            transition: all 0.3s ease;
         }
-
+        .entry:hover ul.bullets li::before {
+            box-shadow: 0 0 0 5px rgba(10, 132, 255, 0.12);
+            opacity: 1;
+        }
         .kpi {
             font-weight: 800;
-            background: linear-gradient(90deg, rgba(100, 210, 255, 0.95), rgba(10, 132, 255, 0.95));
+            background: linear-gradient(90deg, rgba(94, 200, 242, 0.95), rgba(10, 132, 255, 0.9));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
+        @media (prefers-color-scheme: light) {
+            .kpi {
+                background: linear-gradient(90deg, #0a84ff, #007aff);
+                -webkit-background-clip: text;
+                background-clip: text;
+                color: transparent;
+            }
+        }
 
         .footer {
             text-align: center;
-            margin-top: 16px;
+            margin-top: 14px;
             color: var(--muted);
-            font-size: 12.8px;
-            padding: 10px 0 0;
-            opacity: 0.85;
+            font-size: 12.6px;
+            padding: 8px 0 0;
+            opacity: 0.8;
             letter-spacing: 0.3px;
+            position: relative;
+            z-index: 1;
         }
 
         /* Toast */
         .toast {
             position: fixed;
             left: 50%;
-            bottom: 24px;
-            transform: translateX(-50%) scale(0.95);
-            z-index: 50;
-            padding: 10px 20px;
+            bottom: 26px;
+            transform: translateX(-50%) scale(0.92);
+            z-index: 60;
+            padding: 10px 22px;
             border-radius: 999px;
             border: 1px solid var(--line);
-            background: rgba(255, 255, 255, 0.07);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            box-shadow: var(--shadow-soft);
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: var(--shadow-md);
             color: var(--text);
             font-size: 13px;
             opacity: 0;
             pointer-events: none;
-            transition: all 0.3s var(--ease-out);
+            transition: all 0.35s var(--ease-spring);
             font-weight: 500;
+            letter-spacing: 0.2px;
         }
         .toast.show {
             opacity: 1;
             transform: translateX(-50%) scale(1);
         }
 
-        /* Print */
+        /* ============ 打印 ============ */
         @media print {
-            .bg,
+            .bg-layer,
             .dock,
-            .toast {
+            .toast,
+            .cursor-glow,
+            .particles {
                 display: none !important;
             }
             body {
@@ -775,6 +1056,7 @@
                 background: #fff !important;
                 border: 1px solid #ddd !important;
                 backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
             }
             .chip,
             .tile,
@@ -789,6 +1071,8 @@
             .kpi {
                 color: #111 !important;
                 background: none !important;
+                -webkit-background-clip: unset !important;
+                background-clip: unset !important;
             }
             .name {
                 color: #111 !important;
@@ -796,24 +1080,37 @@
                 -webkit-background-clip: unset !important;
                 background-clip: unset !important;
             }
+            .card {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+            .card.reveal {
+                animation: none !important;
+            }
         }
-
-        /* Reduced motion */
         @media (prefers-reduced-motion: reduce) {
             html {
                 scroll-behavior: auto;
             }
-            .blob {
+            .orb {
                 animation: none;
+            }
+            .particle {
+                animation: none;
+                opacity: 0.3;
             }
             .hero {
                 animation: none;
                 opacity: 1;
                 transform: none;
             }
+            .hero::after {
+                animation: none;
+            }
             .card {
                 opacity: 1;
                 transform: none;
+                transition: none;
             }
             .card.reveal {
                 animation: none;
@@ -825,52 +1122,68 @@
             .entry {
                 transition: none !important;
             }
+            .entry::before {
+                animation: none !important;
+                opacity: 0 !important;
+            }
             .avatar:hover {
                 transform: none;
+            }
+            .cursor-glow {
+                display: none !important;
             }
         }
     </style>
 </head>
 
 <body>
-    <div class="bg" aria-hidden="true">
-        <div class="blob b1"></div>
-        <div class="blob b2"></div>
-        <div class="blob b3"></div>
-        <div class="vignette"></div>
-        <div class="grain"></div>
+    <!-- 背景系统 -->
+    <div class="bg-layer" aria-hidden="true">
+        <div class="bg-gradient"></div>
+        <div class="bg-grid"></div>
+        <div class="bg-noise"></div>
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
     </div>
 
-    <div class="wrap">
+    <!-- 光标光晕 -->
+    <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
 
+    <div class="wrap">
         <!-- HERO -->
         <section class="hero" id="top">
             <div class="heroGrid">
-                <!-- Left: identity -->
                 <div class="identity">
-                    <!-- 无照片，优雅文字徽标 -->
                     <div class="avatar" aria-hidden="true">陈</div>
                     <div class="idText">
                         <div class="nameRow">
                             <div class="name">陈亭伊</div>
                             <div class="roleTag">运营 / 策划 / 增长</div>
                         </div>
-
                         <div class="meta">
                             <a href="tel:18723250436" aria-label="拨打电话">18723250436</a>
                             <span class="sep">｜</span>
-                            <a href="mailto:cty007376@gmail.com" aria-label="发送邮件">cty007376@gmail.com</a>
+                            <a href="mailto:2644156966@QQ.COM" aria-label="发送邮件">2644156966@QQ.COM</a>
                             <span class="sep">｜</span>
-                            <span>女</span>
+                            <span>女 · 共青团员</span>
                             <span class="sep">｜</span>
-                            <span>籍贯：重庆</span>
+                            <span>2005.3 · 重庆</span>
                         </div>
-
                         <div class="meta2">
-                            <strong>工作经验：</strong>3年 ｜ <strong>求职意向：</strong>运营、策划、增长 ｜ <strong>期望城市：</strong>川渝｜北京
+                            <strong>实习/项目经验：</strong>近3年 ｜ <strong>求职意向：</strong>运营、策划、增长 ｜ <strong>期望城市：</strong>川渝｜北京
                         </div>
-
-                        <div class="chips" aria-label="tags">
+                        <div class="chips" aria-label="标签">
                             <span class="chip">运营</span>
                             <span class="chip">策划</span>
                             <span class="chip">增长</span>
@@ -878,9 +1191,7 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Right: actions -->
-                <div class="actions" aria-label="quick actions">
+                <div class="actions" aria-label="快捷操作">
                     <div class="tile">
                         <div class="tileHead">
                             <div class="tileTitle"><span class="tileIcon">📞</span>电话</div>
@@ -891,28 +1202,25 @@
                             <button class="btn" type="button" data-copy="18723250436">复制</button>
                         </div>
                     </div>
-
                     <div class="tile">
                         <div class="tileHead">
                             <div class="tileTitle"><span class="tileIcon">✉️</span>邮箱</div>
                         </div>
-                        <div class="tileValue">cty007376@gmail.com</div>
+                        <div class="tileValue">2644156966@QQ.COM</div>
                         <div class="tileBtns">
-                            <a class="btn" href="mailto:cty007376@gmail.com">发送</a>
-                            <button class="btn" type="button" data-copy="cty007376@gmail.com">复制</button>
+                            <a class="btn" href="mailto:2644156966@QQ.COM">发送</a>
+                            <button class="btn" type="button" data-copy="2644156966@QQ.COM">复制</button>
                         </div>
                     </div>
-
                     <div class="tile">
                         <div class="tileHead">
-                            <div class="tileTitle"><span class="tileIcon">🧾</span>一页式简历</div>
+                            <div class="tileTitle"><span class="tileIcon">🧾</span>简历导出</div>
                         </div>
-                        <div class="tileValue">建议：浏览器打印为 PDF</div>
+                        <div class="tileValue">浏览器打印为 PDF</div>
                         <div class="tileBtns">
                             <button class="btn" type="button" id="printBtn">打印 / 导出 PDF</button>
                         </div>
                     </div>
-
                     <div class="tile">
                         <div class="tileHead">
                             <div class="tileTitle"><span class="tileIcon">📍</span>期望城市</div>
@@ -926,8 +1234,8 @@
             </div>
         </section>
 
-        <!-- Dock -->
-        <nav class="dock" aria-label="sections">
+        <!-- Dock导航 -->
+        <nav class="dock" aria-label="页面导航">
             <a href="#edu" data-target="edu">🎓 教育经历</a>
             <a href="#intern" data-target="intern">🏢 实习经历</a>
             <a href="#proj" data-target="proj">✨ 项目经历</a>
@@ -935,186 +1243,288 @@
         </nav>
 
         <div class="sections">
-
             <!-- 教育经历 -->
             <section class="card" id="edu">
-                <div class="sectionTitle">
-                    <h2>教育经历</h2>
-                    <div class="line"></div>
-                </div>
-
-                <div class="entry" style="margin-bottom:0;">
-                    <div class="row">
-                        <div class="left">中央民族大学「985A类双一流院校」</div>
-                        <div class="mid">本科｜网络与新媒体</div>
-                        <div class="right">2023-2027</div>
+                <div class="card-inner">
+                    <div class="sectionTitle">
+                        <h2>教育经历</h2>
+                        <div class="line"></div>
                     </div>
-                    <div class="subline">CET-4、CRT-6、国家人才英语中级、普通话二甲</div>
+                    <div class="entry" style="margin-bottom:0;">
+                        <div class="entry-content">
+                            <div class="row">
+                                <div class="left">中央民族大学「985 A类 · 双一流」</div>
+                                <div class="mid">本科 · 网络与新媒体</div>
+                                <div class="right">2023 – 2027</div>
+                            </div>
+                            <div class="subline">
+                                <strong>GPA：4.0</strong> &nbsp;平均分 <strong>85.45</strong>（专业排名前20%）&nbsp;｜&nbsp;
+                                主修：新媒体文案写作、融合新闻、网络舆情分析、大数据传播、新媒体策划与营销、数字媒体设计、短视频创作、媒介伦理法规、传播研究方法等
+                            </div>
+                            <div class="subline" style="margin-top:4px;">
+                                荣誉/证书：CET-4 · CRT-6 · 国家人才英语中级 · 普通话二甲
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
             <!-- 实习经历 -->
             <section class="card" id="intern">
-                <div class="sectionTitle">
-                    <h2>实习经历</h2>
-                    <div class="line"></div>
-                </div>
-
-                <div class="entry">
-                    <div class="row">
-                        <div class="left">北京梧桐花开科技有限公司</div>
-                        <div class="mid">新媒体运营及策划</div>
-                        <div class="right">2025.09-2026.01</div>
+                <div class="card-inner">
+                    <div class="sectionTitle">
+                        <h2>实习经历</h2>
+                        <div class="line"></div>
                     </div>
-                    <ul class="bullets">
-                        <li>流量策划：热榜制作独立完成全流程任务；优化热榜逻辑，提升内容精准度，助力流量分发效率提升。</li>
-                        <li>数据统计分析：完成近 <span class="kpi">30</span> 位财经博主数据全维度统计，输出覆盖产出、传播数据的分析报告；拆解教育、情感等 3 个领域抖音博主爆款逻辑，总结选题方向与内容结构，为增长选题提供参考。</li>
-                        <li>优化：参与完善支付宝电鳗平台分发 SOP，补充关键操作节点；整理任务错误统计表，为降低运营失误、提升效率提供数据支撑。</li>
-                    </ul>
-                </div>
 
-                <div class="entry">
-                    <div class="row">
-                        <div class="left">北京蒸汽记忆公司</div>
-                        <div class="mid">产品运营</div>
-                        <div class="right">2025.06-2025.09</div>
+                    <!-- 京能置业 -->
+                    <div class="entry">
+                        <div class="entry-content">
+                            <div class="row">
+                                <div class="left">京能置业股份有限公司（国企）</div>
+                                <div class="mid">党群工作部 · 宣传实习生</div>
+                                <div class="right">2026.07 – 至今</div>
+                            </div>
+                            <ul class="bullets">
+                                <li><strong>党建内容运营：</strong>撰写党建、企业文化、主题活动宣传稿件，运营企业宣传平台，完成图文编辑、校对，把控内容合规性。</li>
+                                <li><strong>活动宣传采编：</strong>跟进党群活动拍摄纪实、短视频剪辑，归集整理宣传素材，定期统计传播数据并输出效果复盘。</li>
+                                <li><strong>宣传流程标准化：</strong>梳理宣传台账，搭建素材归档、内容审核 SOP，制作党建展板、活动简报等各类线下线上宣传物料。</li>
+                            </ul>
+                        </div>
                     </div>
-                    <ul class="bullets">
-                        <li>审核生态监控：牵头完成 Slack、Zendesk 等 <span class="kpi">12</span> 个第三方平台 OAuth 接入，建立“资料模板 + 审核清单 + 回调校验”SOP，实现平均审核时长 6 天、一次通过率 85%。</li>
-                        <li>增长与产品优化：上线新手引导及激活任务，补齐权限/令牌过期提示、错误态回写等细节；搭建注册、首日激活、7/30 日留存等指标口径，每两周复盘渠道与版本表现，5 个月内实现 MAU+20%、新增注册 +27%、首日激活率 38%、7 日留存 24%。</li>
-                        <li>GTM/对外：策划执行清华、北大等 6 场高校推介会，统筹讲稿、Demo 等物料，累计到场 1100+、意向 420、当场注册 230；输出中英双语 ONE-PAGER、FAQ、集成白皮书，支撑 BD 外联与官网转化；对接海外开发者/伙伴 100+ 场会议，促成 32 家试用、10 家 PoC、3 家长期合作。</li>
-                        <li>招聘优化：（投递-筛选-约面-反馈），将面试周期压缩至 7 天，沉淀面试题库与候选人标签规则。</li>
-                    </ul>
-                </div>
 
-                <div class="entry">
-                    <div class="row">
-                        <div class="left">奇迹创坛</div>
-                        <div class="mid">人才调研</div>
-                        <div class="right">2025.01-2025.05</div>
+                    <!-- 北京梧桐花开 -->
+                    <div class="entry">
+                        <div class="entry-content">
+                            <div class="row">
+                                <div class="left">北京梧桐花开科技有限公司</div>
+                                <div class="mid">新媒体运营及策划</div>
+                                <div class="right">2025.09 – 2026.01</div>
+                            </div>
+                            <ul class="bullets">
+                                <li><strong>流量策划：</strong>独立完成热榜制作全流程；优化热榜逻辑，提升内容精准度，助力流量分发效率提升。</li>
+                                <li><strong>数据统计分析：</strong>完成近 <span class="kpi">30</span> 位财经博主数据全维度统计，输出覆盖产出、传播数据的分析报告；拆解 <span class="kpi">10+</span> 领域抖音博主爆款逻辑，总结选题方向与内容结构，为增长提供选题参考。</li>
+                                <li><strong>流程优化：</strong>参与完善支付宝电鳗平台分发 SOP，补充关键操作节点；整理任务错误统计表，为降低运营失误、提升效率提供数据支撑。</li>
+                            </ul>
+                        </div>
                     </div>
-                    <ul class="bullets">
-                        <li>数据标注、数据清洗：收集与结构化 <span class="kpi">20,000+</span> 条目标人才数据，完成去重与字段统一；系统化上传 100% 完成。</li>
-                        <li>建联人才：基于需求画像，锁定并触达 500+ 高潜候选人，达成合作 50+；沉淀“人才 mapping”SOP，支持半导体与海外医疗等跨部门项目。</li>
-                        <li>负责薪资与标签的可视化标注与抽样校验，保障数据标注一致性 ≥97%、抽检错误率 ≤3%。</li>
-                    </ul>
-                </div>
 
-                <div class="entry" style="margin-bottom:0;">
-                    <div class="row">
-                        <div class="left">爱阅-英语教培机构</div>
-                        <div class="mid">英语教师</div>
-                        <div class="right">2024.09-2024.12</div>
+                    <!-- 北京蒸汽记忆 -->
+                    <div class="entry">
+                        <div class="entry-content">
+                            <div class="row">
+                                <div class="left">北京蒸汽记忆公司</div>
+                                <div class="mid">产品运营</div>
+                                <div class="right">2025.06 – 2025.09</div>
+                            </div>
+                            <ul class="bullets">
+                                <li><strong>审核生态监控：</strong>牵头完成 Slack、Zendesk 等 <span class="kpi">12</span> 个第三方平台 OAuth 接入，建立"资料模板 + 审核清单 + 回调校验"SOP，实现平均审核时长 <span class="kpi">6 天</span>、一次通过率 <span class="kpi">85%</span>。</li>
+                                <li><strong>GTM / 对外：</strong>策划执行清华、北大等 <span class="kpi">6</span> 场高校推介会，统筹讲稿、Demo 等物料，累计到场 <span class="kpi">1100+</span>、意向 <span class="kpi">420</span>、当场注册 <span class="kpi">230</span>；输出中英双语 ONE-PAGER、FAQ、集成白皮书，支撑 BD 外联与官网转化；对接海外开发者/伙伴 <span class="kpi">100+</span> 场会议，促成 <span class="kpi">32</span> 家试用、<span class="kpi">10</span> 家 PoC、<span class="kpi">3</span> 家长期合作。</li>
+                                <li><strong>招聘优化：</strong>优化（投递→筛选→约面→反馈）流程，将面试周期压缩至 <span class="kpi">7 天</span>，沉淀面试题库与候选人标签规则。</li>
+                            </ul>
+                        </div>
                     </div>
-                    <ul class="bullets">
-                        <li>负责 6-16 岁学生英语阶段性课程教学，设计趣味课堂活动（如情景对话、英文游戏）；策划并执行“万圣节英语派对”活动参与人数超 200 人，获家长满意度 100%。</li>
-                        <li>所带班级学员英语成绩平均提升 25%，续课率达 90%。</li>
-                    </ul>
+
+                    <!-- 奇迹创坛 -->
+                    <div class="entry" style="margin-bottom:0;">
+                        <div class="entry-content">
+                            <div class="row">
+                                <div class="left">奇迹创坛</div>
+                                <div class="mid">人才调研</div>
+                                <div class="right">2025.01 – 2025.05</div>
+                            </div>
+                            <ul class="bullets">
+                                <li><strong>数据标注与清洗：</strong>收集与结构化 <span class="kpi">20,000+</span> 条目标人才数据，完成去重与字段统一，系统化上传 100% 完成。</li>
+                                <li><strong>人才建联：</strong>基于需求画像，锁定并触达 <span class="kpi">500+</span> 高潜候选人，达成合作 <span class="kpi">50+</span>；沉淀"人才 mapping"SOP，支持半导体与海外医疗等跨部门项目。</li>
+                                <li><strong>质量保障：</strong>负责薪资与标签的可视化标注与抽样校验，保障数据标注一致性 <span class="kpi">≥97%</span>、抽检错误率 <span class="kpi">≤3%</span>。</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </section>
 
             <!-- 项目经历 -->
             <section class="card" id="proj">
-                <div class="sectionTitle">
-                    <h2>项目经历</h2>
-                    <div class="line"></div>
-                </div>
-
-                <div class="entry">
-                    <div class="row">
-                        <div class="left">中国移动创客比赛-颜探网页开发二等奖</div>
-                        <div class="mid">网页开发</div>
-                        <div class="right">2024.10-2024.12</div>
+                <div class="card-inner">
+                    <div class="sectionTitle">
+                        <h2>项目经历</h2>
+                        <div class="line"></div>
                     </div>
-                </div>
 
-                <div class="entry">
-                    <div class="row">
-                        <div class="left">NCDA未来设计师大赛北京市三等奖</div>
-                        <div class="mid">摄影 / 后期剪辑 / 脚本构思</div>
-                        <div class="right">2025.03-至今</div>
+                    <div class="entry">
+                        <div class="entry-content">
+                            <div class="row">
+                                <div class="left">NCDA 未来设计师大赛 · 北京市三等奖</div>
+                                <div class="mid">摄影 / 后期剪辑 / 脚本构思</div>
+                                <div class="right">2025.03 – 至今</div>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="entry" style="margin-bottom:0;">
-                    <div class="row">
-                        <div class="left">新媒体视域下少数民族非遗文化的创新传播与立法传承——以回族民谣文化为例</div>
-                        <div class="mid">队长</div>
-                        <div class="right">2023.10-2024.05</div>
+                    <div class="entry">
+                        <div class="entry-content">
+                            <div class="row">
+                                <div class="left">中国移动创客比赛 · 颜探网页开发 · 二等奖</div>
+                                <div class="mid">网页开发 / UI 设计</div>
+                                <div class="right">2024.10 – 2024.12</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="subline">
-                        从内容策划到制作，数据分析到运营推广我都有了一定的理论基础和扎实的实践经验。项目编号：QMRP2023110913
-                    </div>
-                </div>
 
-                <div class="footer">© 2026 陈亭伊｜运营 / 策划 / 增长｜期望城市：川渝｜北京</div>
+                    <div class="entry" style="margin-bottom:0;">
+                        <div class="entry-content">
+                            <div class="row">
+                                <div class="left">新媒体视域下少数民族非遗文化的创新传播与立法传承——以回族民谣文化为例</div>
+                                <div class="mid">队长</div>
+                                <div class="right">2023.10 – 2024.05</div>
+                            </div>
+                            <div class="subline">
+                                从内容策划到制作、数据分析到运营推广，具备扎实的理论基础与丰富的实践经验。项目编号：QMRP2023110913
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="footer">© 2026 陈亭伊｜运营 / 策划 / 增长｜期望城市：川渝｜北京</div>
+                </div>
             </section>
-
         </div>
     </div>
 
     <div class="toast" id="toast" role="status" aria-live="polite">已复制</div>
 
     <script>
-        // Reveal cards with Intersection Observer
-        const cards = document.querySelectorAll('.card');
-        const revealIO = new IntersectionObserver((entries) => {
-            entries.forEach(e => {
-                if (e.isIntersecting) {
-                    e.target.classList.add('reveal');
-                    revealIO.unobserve(e.target);
+        (function() {
+            // ===== 光标光晕 =====
+            const cursorGlow = document.getElementById('cursorGlow');
+            let glowTimeout;
+            let mouseX = -500;
+            let mouseY = -500;
+            let currentX = -500;
+            let currentY = -500;
+
+            document.addEventListener('mousemove', function(e) {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                if (cursorGlow) {
+                    cursorGlow.style.opacity = '1';
                 }
+                clearTimeout(glowTimeout);
+                glowTimeout = setTimeout(function() {
+                    if (cursorGlow) cursorGlow.style.opacity = '0';
+                }, 2500);
+            }, { passive: true });
+
+            document.addEventListener('mouseleave', function() {
+                if (cursorGlow) cursorGlow.style.opacity = '0';
             });
-        }, { threshold: 0.15 });
-        cards.forEach(c => revealIO.observe(c));
 
-        // Dock scroll spy
-        const dockLinks = Array.from(document.querySelectorAll('.dock a[data-target]'));
-        const spySections = dockLinks
-            .map(a => document.getElementById(a.dataset.target))
-            .filter(Boolean);
-
-        function setActive(id) {
-            dockLinks.forEach(a => a.classList.toggle('active', a.dataset.target === id));
-        }
-
-        const spyIO = new IntersectionObserver((entries) => {
-            const visible = entries
-                .filter(e => e.isIntersecting)
-                .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-            if (visible && visible.target && visible.target.id) {
-                setActive(visible.target.id);
+            function animateGlow() {
+                currentX += (mouseX - currentX) * 0.06;
+                currentY += (mouseY - currentY) * 0.06;
+                if (cursorGlow) {
+                    cursorGlow.style.left = currentX + 'px';
+                    cursorGlow.style.top = currentY + 'px';
+                }
+                requestAnimationFrame(animateGlow);
             }
-        }, { threshold: [0.2, 0.4, 0.6] });
+            animateGlow();
 
-        spySections.forEach(s => spyIO.observe(s));
-        setActive('edu');
+            // ===== 卡片入场观察 =====
+            const cards = document.querySelectorAll('.card');
+            const revealIO = new IntersectionObserver(function(entries) {
+                entries.forEach(function(e) {
+                    if (e.isIntersecting) {
+                        e.target.classList.add('reveal');
+                        revealIO.unobserve(e.target);
+                    }
+                });
+            }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+            cards.forEach(function(c) { revealIO.observe(c); });
 
-        // Print
-        const printBtn = document.getElementById('printBtn');
-        if (printBtn) printBtn.addEventListener('click', () => window.print());
+            // ===== Dock 滚动监听 =====
+            const dockLinks = Array.from(document.querySelectorAll('.dock a[data-target]'));
+            const spySections = dockLinks
+                .map(function(a) { return document.getElementById(a.dataset.target); })
+                .filter(Boolean);
 
-        // Toast + Copy
-        const toast = document.getElementById('toast');
-        let toastTimer = null;
+            function setActive(id) {
+                dockLinks.forEach(function(a) {
+                    a.classList.toggle('active', a.dataset.target === id);
+                });
+            }
 
-        function showToast(text) {
-            if (!toast) return;
-            toast.textContent = text;
-            toast.classList.add('show');
-            clearTimeout(toastTimer);
-            toastTimer = setTimeout(() => toast.classList.remove('show'), 1400);
-        }
+            const spyIO = new IntersectionObserver(function(entries) {
+                const visible = entries
+                    .filter(function(e) { return e.isIntersecting; })
+                    .sort(function(a, b) { return b.intersectionRatio - a.intersectionRatio; })[0];
+                if (visible && visible.target && visible.target.id) {
+                    setActive(visible.target.id);
+                }
+            }, { threshold: [0.15, 0.35, 0.55], rootMargin: '0px 0px -60px 0px' });
 
-        async function copyText(text) {
-            try {
-                await navigator.clipboard.writeText(text);
-                showToast('已复制：' + text);
-            } catch (err) {
+            spySections.forEach(function(s) { spyIO.observe(s); });
+            if (spySections.length > 0) setActive(spySections[0].id);
+
+            // ===== Entry 3D 倾斜效果 =====
+            const entries = document.querySelectorAll('.entry');
+            entries.forEach(function(entry) {
+                entry.addEventListener('mousemove', function(e) {
+                    const rect = entry.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = ((y - centerY) / centerY) * -4;
+                    const rotateY = ((x - centerX) / centerX) * 4;
+                    entry.style.transform =
+                        'translateY(-4px) perspective(800px) rotateX(' + rotateX + 'deg) rotateY(' +
+                        rotateY + 'deg)';
+                    entry.style.transition = 'transform 0.15s ease-out, border-color 0.4s ease, background 0.4s ease, box-shadow 0.4s ease';
+                });
+                entry.addEventListener('mouseleave', function() {
+                    entry.style.transform =
+                        'translateY(0px) perspective(800px) rotateX(0deg) rotateY(0deg)';
+                    entry.style.transition =
+                        'transform 0.6s cubic-bezier(.16, 1, .3, 1), border-color 0.4s ease, background 0.4s ease, box-shadow 0.4s ease';
+                });
+            });
+
+            // ===== 打印按钮 =====
+            const printBtn = document.getElementById('printBtn');
+            if (printBtn) {
+                printBtn.addEventListener('click', function() { window.print(); });
+            }
+
+            // ===== Toast + 复制 =====
+            const toast = document.getElementById('toast');
+            let toastTimer = null;
+
+            function showToast(text) {
+                if (!toast) return;
+                toast.textContent = text;
+                toast.classList.add('show');
+                clearTimeout(toastTimer);
+                toastTimer = setTimeout(function() { toast.classList.remove('show'); }, 1500);
+            }
+
+            function copyText(text) {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(function() {
+                        showToast('已复制：' + text);
+                    }).catch(function() {
+                        fallbackCopy(text);
+                    });
+                } else {
+                    fallbackCopy(text);
+                }
+            }
+
+            function fallbackCopy(text) {
                 const t = document.createElement('textarea');
                 t.value = text;
                 t.style.position = 'fixed';
                 t.style.opacity = '0';
+                t.style.pointerEvents = 'none';
                 document.body.appendChild(t);
                 t.select();
                 try {
@@ -1125,13 +1535,19 @@
                 }
                 document.body.removeChild(t);
             }
-        }
 
-        document.querySelectorAll('[data-copy]').forEach(btn => {
-            btn.addEventListener('click', () => {
-                copyText(btn.getAttribute('data-copy'));
+            document.querySelectorAll('[data-copy]').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    copyText(btn.getAttribute('data-copy'));
+                });
             });
-        });
+
+            // ===== 初始显示第一个卡片 =====
+            if (cards.length > 0 && cards[0].getBoundingClientRect().top < window.innerHeight) {
+                cards[0].classList.add('reveal');
+                revealIO.unobserve(cards[0]);
+            }
+        })();
     </script>
 </body>
 </html>
